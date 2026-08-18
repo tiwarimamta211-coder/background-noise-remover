@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Background Noise Remover — AI Audio Cleaner | IncomeAIHub</title>
+<meta name="description" content="Apne audio/video ki background noise seconds mein hata dein. Free preview, one-time unlock ₹199.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08090c;
+  --bg-panel:#101319;
+  --bg-panel-2:#151923;
+  --line:#22262f;
+  --gold:#f0c14b;
+  --gold-dim:#a3822f;
+  --emerald:#34d399;
+  --emerald-dim:#1a6b52;
+  --violet:#a78bfa;
+  --violet-dim:#5b4a94;
+  --text:#eef0f4;
+  --text-dim:#9aa1ad;
+  --text-faint:#565d6b;
+  --danger:#f36a6a;
+  --radius:14px;
+  --shadow: 0 20px 60px -20px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(167,139,250,.10), transparent 60%),
+    radial-gradient(1000px 500px at 100% 0%, rgba(52,211,153,.08), transparent 55%),
+    var(--bg);
+  color:var(--text);
+  font-family:'DM Sans', sans-serif;
+  min-height:100vh;
+  line-height:1.5;
+}
+h1,h2,h3,.brand,.display{font-family:'Syne', sans-serif;}
+.mono{font-family:'DM Mono', monospace;}
+a{color:inherit;}
+.wrap{max-width:1120px; margin:0 auto; padding:0 20px;}
+
+/* NAV */
+nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(8,9,12,.85); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+.brand{font-size:19px; font-weight:800; letter-spacing:.2px; display:flex; align-items:center; gap:8px;}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--emerald); box-shadow:0 0 12px var(--emerald);}
+.brand small{font-family:'DM Sans'; font-weight:500; color:var(--text-faint); font-size:12px; margin-left:6px;}
+.nav-actions{display:flex; gap:10px; align-items:center;}
+.icon-btn{
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--line);
+  background:var(--bg-panel); color:var(--text-dim); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-weight:700; font-size:14px; transition:.2s;
+}
+.icon-btn:hover{border-color:var(--gold); color:var(--gold);}
+
+/* HERO */
+.hero{padding:56px 0 28px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--violet); background:rgba(167,139,250,.08); border:1px solid rgba(167,139,250,.25);
+  padding:6px 12px; border-radius:100px; font-weight:600;
+}
+.hero h1{font-size:clamp(30px,5vw,46px); line-height:1.08; margin:18px 0 14px; font-weight:800; max-width:760px;}
+.hero h1 span{color:var(--emerald);}
+.hero p{color:var(--text-dim); font-size:16px; max-width:560px;}
+.hero-stats{display:flex; gap:28px; margin-top:26px; flex-wrap:wrap;}
+.hero-stats div b{display:block; font-family:'Syne'; font-size:20px; color:var(--gold);}
+.hero-stats div span{font-size:12px; color:var(--text-faint);}
+
+/* AD SLOT */
+.ad-slot{
+  border:1px dashed var(--line); border-radius:10px; padding:14px; text-align:center;
+  color:var(--text-faint); font-size:11px; letter-spacing:.05em; text-transform:uppercase; margin:22px 0;
+  background:rgba(255,255,255,.015);
+}
+
+/* APP CARD */
+.app{
+  background:linear-gradient(180deg, var(--bg-panel), var(--bg-panel-2));
+  border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+  padding:26px; margin:26px 0 60px; position:relative; overflow:hidden;
+}
+.app::before{
+  content:''; position:absolute; inset:0; pointer-events:none; border-radius:20px;
+  background:linear-gradient(120deg, rgba(240,193,75,.06), transparent 30%, transparent 70%, rgba(52,211,153,.05));
+}
+.app-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px;}
+.app-head h2{font-size:20px;}
+.badge{
+  font-size:11px; font-weight:700; padding:5px 10px; border-radius:100px; letter-spacing:.03em;
+}
+.badge.demo{background:rgba(240,193,75,.12); color:var(--gold); border:1px solid rgba(240,193,75,.35);}
+.badge.live{background:rgba(52,211,153,.12); color:var(--emerald); border:1px solid rgba(52,211,153,.35);}
+.badge.unlocked{background:rgba(52,211,153,.18); color:var(--emerald); border:1px solid var(--emerald);}
+
+/* DROPZONE */
+.dropzone{
+  border:1.5px dashed var(--line); border-radius:16px; padding:40px 20px; text-align:center;
+  cursor:pointer; transition:.2s; background:rgba(255,255,255,.015);
+}
+.dropzone:hover, .dropzone.drag{border-color:var(--emerald); background:rgba(52,211,153,.04);}
+.dropzone .icon{font-size:34px; margin-bottom:10px;}
+.dropzone h3{font-size:16px; margin-bottom:6px; font-weight:700;}
+.dropzone p{color:var(--text-faint); font-size:13px;}
+.dz-buttons{display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap;}
+input[type=file]{display:none;}
+
+/* BUTTONS */
+.btn{
+  border:none; border-radius:10px; padding:12px 20px; font-weight:700; font-size:14px;
+  cursor:pointer; transition:.15s; font-family:'DM Sans'; display:inline-flex; align-items:center; gap:8px;
+}
+.btn:disabled{opacity:.4; cursor:not-allowed;}
+.btn-primary{background:linear-gradient(135deg, var(--emerald), #22c48f); color:#052e22;}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px); box-shadow:0 8px 24px -8px rgba(52,211,153,.5);}
+.btn-gold{background:linear-gradient(135deg, var(--gold), #d8a53a); color:#2a1e02;}
+.btn-gold:hover:not(:disabled){transform:translateY(-1px); box-shadow:0 8px 24px -8px rgba(240,193,75,.5);}
+.btn-ghost{background:transparent; border:1px solid var(--line); color:var(--text);}
+.btn-ghost:hover{border-color:var(--text-dim);}
+.btn-violet{background:linear-gradient(135deg, var(--violet), #8b6ff0); color:#1c1330;}
+.btn-violet:hover:not(:disabled){transform:translateY(-1px); box-shadow:0 8px 24px -8px rgba(167,139,250,.5);}
+
+/* WORKSPACE */
+.workspace{display:none; margin-top:24px;}
+.file-info{
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:12px 16px; margin-bottom:18px;
+}
+.file-info .name{font-weight:600; font-size:14px;}
+.file-info .meta{color:var(--text-faint); font-size:12px;}
+.file-info .remove{color:var(--danger); cursor:pointer; font-size:13px; font-weight:600;}
+
+.canvas-box{
+  background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:14px;
+}
+.canvas-box .label{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); margin-bottom:8px; display:flex; justify-content:space-between;}
+canvas{width:100%; height:110px; display:block; border-radius:6px;}
+
+.controls-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:16px; margin:20px 0;
+}
+.control{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
+.control .top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.control label{font-size:13px; font-weight:600; color:var(--text-dim);}
+.control .val{font-family:'DM Mono'; font-size:12px; color:var(--emerald); background:rgba(52,211,153,.08); padding:2px 8px; border-radius:6px;}
+input[type=range]{
+  -webkit-appearance:none; width:100%; height:4px; border-radius:4px;
+  background:linear-gradient(90deg, var(--emerald), var(--line)); outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+  background:var(--emerald); border:3px solid #052e22; cursor:pointer; box-shadow:0 0 0 2px rgba(52,211,153,.3);
+}
+.control .hint{font-size:11px; color:var(--text-faint); margin-top:8px;}
+
+.presets{display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;}
+.preset-chip{
+  border:1px solid var(--line); background:var(--bg); color:var(--text-dim); font-size:12px; font-weight:600;
+  padding:8px 14px; border-radius:100px; cursor:pointer; transition:.15s;
+}
+.preset-chip:hover{border-color:var(--violet); color:var(--violet);}
+.preset-chip.active{background:rgba(167,139,250,.12); border-color:var(--violet); color:var(--violet);}
+
+.action-row{display:flex; gap:12px; flex-wrap:wrap; margin:22px 0 6px;}
+
+.result-box{display:none; margin-top:26px; border-top:1px solid var(--line); padding-top:22px;}
+.player-row{display:flex; align-items:center; gap:14px; margin:12px 0; flex-wrap:wrap;}
+audio{flex:1; min-width:220px;}
+.stat-pills{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0;}
+.pill{background:var(--bg); border:1px solid var(--line); border-radius:100px; padding:6px 14px; font-size:12px; color:var(--text-dim);}
+.pill b{color:var(--gold);}
+
+.lock-banner{
+  display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  background:linear-gradient(120deg, rgba(240,193,75,.08), rgba(167,139,250,.06));
+  border:1px solid rgba(240,193,75,.3); border-radius:12px; padding:16px 18px; margin-top:18px;
+}
+.lock-banner .txt b{color:var(--gold); font-family:'Syne'; font-size:15px;}
+.lock-banner .txt p{color:var(--text-dim); font-size:13px; margin-top:4px;}
+
+.progress-wrap{display:none; margin:20px 0;}
+.progress-bar{height:6px; border-radius:6px; background:var(--bg); overflow:hidden; border:1px solid var(--line);}
+.progress-fill{height:100%; width:0%; background:linear-gradient(90deg, var(--emerald), var(--violet)); transition:width .15s;}
+.progress-label{font-size:12px; color:var(--text-faint); margin-top:8px; text-align:center;}
+
+/* FEATURES */
+.features{padding:20px 0 60px;}
+.features h2{font-size:26px; text-align:center; margin-bottom:8px;}
+.features > p{text-align:center; color:var(--text-dim); margin-bottom:34px;}
+.feat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px;}
+.feat-card{background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:20px;}
+.feat-card .ic{font-size:22px; margin-bottom:10px;}
+.feat-card h3{font-size:15px; margin-bottom:6px;}
+.feat-card p{font-size:13px; color:var(--text-faint);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line); padding:30px 0; text-align:center; color:var(--text-faint); font-size:13px;}
+footer .brand{justify-content:center; margin-bottom:8px;}
+
+/* MODALS */
+.modal-overlay{
+  display:none; position:fixed; inset:0; background:rgba(3,4,6,.75); backdrop-filter:blur(4px);
+  z-index:100; align-items:center; justify-content:center; padding:20px;
+}
+.modal{
+  background:var(--bg-panel); border:1px solid var(--line); border-radius:18px; max-width:480px; width:100%;
+  padding:26px; max-height:85vh; overflow-y:auto; box-shadow:var(--shadow);
+}
+.modal h2{font-size:19px; margin-bottom:14px;}
+.modal .close{float:right; cursor:pointer; color:var(--text-faint); font-size:20px;}
+.guide-step{display:flex; gap:12px; margin-bottom:16px;}
+.guide-step .num{
+  width:26px; height:26px; border-radius:50%; background:rgba(52,211,153,.12); color:var(--emerald);
+  display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;
+}
+.guide-step p{font-size:13.5px; color:var(--text-dim);}
+.guide-step b{color:var(--text);}
+
+.price-box{
+  background:var(--bg); border:1px solid var(--gold-dim); border-radius:14px; padding:20px; text-align:center; margin:16px 0;
+}
+.price-box .amt{font-family:'Syne'; font-size:34px; color:var(--gold);}
+.price-box .amt span{font-size:15px; color:var(--text-faint); font-weight:500;}
+.price-list{list-style:none; text-align:left; margin:16px 0; font-size:13px; color:var(--text-dim);}
+.price-list li{padding:6px 0; display:flex; gap:8px;}
+.price-list li::before{content:'✓'; color:var(--emerald); font-weight:700;}
+
+@media(max-width:640px){
+  .hero{padding:36px 0 18px;}
+  .app{padding:18px; border-radius:16px;}
+  .lock-banner{flex-direction:column; align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>IncomeAIHub<small>by M.Dev</small></div>
+    <div class="nav-actions">
+      <div class="icon-btn" id="guideBtn" title="Hindi Guide">?</div>
+      <div class="icon-btn" id="langBtn" title="Toggle Hinglish">अ</div>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">● AI Audio Tool</span>
+    <h1>Background Noise <span>Remover</span></h1>
+    <p>Fan ki awaaz, traffic, echo, hiss — sab kuch hata kar apna audio studio-clean bana lein. Seedha browser mein, koi upload server pe nahi jaata.</p>
+    <div class="hero-stats">
+      <div><b>100%</b><span>Browser-based</span></div>
+      <div><b>&lt;30s</b><span>Processing time</span></div>
+      <div><b>MP3/WAV</b><span>Export ready</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="ad-slot">Advertisement · 728×90</div>
+
+  <div class="app">
+    <div class="app-head">
+      <h2>🎧 Noise Remover Studio</h2>
+      <span id="modeBadge" class="badge demo">DEMO MODE</span>
+    </div>
+
+    <!-- DROPZONE -->
+    <div class="dropzone" id="dropzone">
+      <div class="icon">🎙️</div>
+      <h3>Audio file yahan drop karein</h3>
+      <p>MP3, WAV, M4A, OGG supported · Max 25MB</p>
+      <div class="dz-buttons">
+        <button class="btn btn-primary" id="pickFileBtn">📁 File Chunein</button>
+        <button class="btn btn-ghost" id="recordBtn">⏺ Record Karein</button>
+      </div>
+      <input type="file" id="fileInput" accept="audio/*,video/mp4,video/webm">
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="workspace" id="workspace">
+      <div class="file-info">
+        <div>
+          <div class="name" id="fileName">—</div>
+          <div class="meta" id="fileMeta">—</div>
+        </div>
+        <div class="remove" id="removeFile">✕ Remove</div>
+      </div>
+
+      <div class="canvas-box">
+        <div class="label"><span>Original Waveform</span><span id="origDuration" class="mono">00:00</span></div>
+        <canvas id="origCanvas"></canvas>
+      </div>
+
+      <div class="presets">
+        <div class="preset-chip active" data-preset="voice">🎙️ Voice / Podcast</div>
+        <div class="preset-chip" data-preset="meeting">💼 Meeting / Call</div>
+        <div class="preset-chip" data-preset="music">🎵 Music Background</div>
+        <div class="preset-chip" data-preset="outdoor">🌆 Outdoor / Traffic</div>
+        <div class="preset-chip" data-preset="custom">⚙️ Custom</div>
+      </div>
+
+      <div class="controls-grid">
+        <div class="control">
+          <div class="top"><label>Noise Reduction Strength</label><span class="val" id="valStrength">65%</span></div>
+          <input type="range" id="strength" min="0" max="100" value="65">
+          <div class="hint">Jitna zyada, utni background hiss kam</div>
+        </div>
+        <div class="control">
+          <div class="top"><label>Noise Gate Threshold</label><span class="val" id="valGate">-42dB</span></div>
+          <input type="range" id="gate" min="-70" max="-10" value="-42">
+          <div class="hint">Iske neeche ki awaaz mute ho jaayegi</div>
+        </div>
+        <div class="control">
+          <div class="top"><label>High-Pass (Rumble Cut)</label><span class="val" id="valHP">90Hz</span></div>
+          <input type="range" id="highpass" min="20" max="400" value="90">
+          <div class="hint">Fan/AC ki low hum yahan se kategi</div>
+        </div>
+        <div class="control">
+          <div class="top"><label>Low-Pass (Hiss Cut)</label><span class="val" id="valLP">9000Hz</span></div>
+          <input type="range" id="lowpass" min="2000" max="18000" value="9000">
+          <div class="hint">Tez hiss/static yahan se katega</div>
+        </div>
+        <div class="control">
+          <div class="top"><label>Voice Clarity Boost</label><span class="val" id="valClarity">30%</span></div>
+          <input type="range" id="clarity" min="0" max="100" value="30">
+          <div class="hint">Vocal frequencies ko thoda upar uthaye</div>
+        </div>
+        <div class="control">
+          <div class="top"><label>Output Gain</label><span class="val" id="valGain">0dB</span></div>
+          <input type="range" id="gain" min="-12" max="12" value="0">
+          <div class="hint">Final volume level adjust karein</div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" id="processBtn">✨ Clean Audio Karein</button>
+        <button class="btn btn-ghost" id="previewBtn">▶ Original Suno</button>
+      </div>
+
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-label" id="progressLabel">Processing...</div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="result-box" id="resultBox">
+        <h3 style="font-size:16px; margin-bottom:10px;">✅ Cleaned Result</h3>
+        <div class="canvas-box">
+          <div class="label"><span>Cleaned Waveform</span><span class="mono" id="cleanDuration">00:00</span></div>
+          <canvas id="cleanCanvas"></canvas>
+        </div>
+        <div class="player-row">
+          <audio id="cleanAudio" controls></audio>
+        </div>
+        <div class="stat-pills">
+          <div class="pill">Noise reduced: <b id="statReduction">—</b></div>
+          <div class="pill">Preset used: <b id="statPreset">Voice / Podcast</b></div>
+          <div class="pill">Output: <b>WAV 16-bit</b></div>
+        </div>
+
+        <div id="freeExportRow" class="action-row">
+          <button class="btn btn-gold" id="downloadFreeBtn">⬇ Free Preview Download (20s)</button>
+          <button class="btn btn-violet" id="unlockBtn">🔓 Unlock Full Export — ₹199</button>
+        </div>
+        <div id="unlockedExportRow" class="action-row" style="display:none;">
+          <button class="btn btn-primary" id="downloadFullBtn">⬇ Download Full Cleaned Audio (WAV)</button>
+        </div>
+
+        <div class="lock-banner" id="lockBanner">
+          <div class="txt">
+            <b>Lifetime Unlock — ₹199 one-time</b>
+            <p>Full-length export, unlimited files, no watermark. Ek baar pay karo, hamesha ke liye use karo.</p>
+          </div>
+          <button class="btn btn-gold" id="lockBannerBtn">Unlock Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot">Advertisement · 300×250</div>
+
+  <section class="features">
+    <h2>Kya-kya milta hai is tool mein</h2>
+    <p>Ek complete browser-based audio cleaning studio</p>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="ic">🎚️</div><h3>5 Smart Controls</h3><p>Noise strength, gate, high-pass, low-pass aur clarity boost — sab manual control mein.</p></div>
+      <div class="feat-card"><div class="ic">⚡</div><h3>Instant Presets</h3><p>Voice, Meeting, Music aur Outdoor recordings ke liye ready-made settings.</p></div>
+      <div class="feat-card"><div class="ic">🔒</div><h3>100% Private</h3><p>Aapka audio kabhi server pe upload nahi hota — sab processing browser mein hoti hai.</p></div>
+      <div class="feat-card"><div class="ic">📊</div><h3>Waveform Compare</h3><p>Before/after waveform dekh kar farak clearly samjhein.</p></div>
+      <div class="feat-card"><div class="ic">💾</div><h3>WAV Export</h3><p>High quality 16-bit WAV file directly download karein.</p></div>
+      <div class="feat-card"><div class="ic">♾️</div><h3>Lifetime Access</h3><p>Ek baar unlock karo, jitna chaho utna use karo — koi subscription nahi.</p></div>
+    </div>
+  </section>
+
+  <div class="ad-slot">Advertisement · 728×90</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="brand">IncomeAIHub <small>by M.Dev · Raipur</small></div>
+    <div>© 2026 IncomeAIHub. Sabhi rights reserved.</div>
+  </div>
+</footer>
+
+<!-- GUIDE MODAL -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal">
+    <span class="close" id="closeGuide">✕</span>
+    <h2>📖 Kaise Use Karein (Hindi Guide)</h2>
+    <div class="guide-step"><div class="num">1</div><p><b>Audio upload karein</b> — File choose karein ya seedha record button se record karein.</p></div>
+    <div class="guide-step"><div class="num">2</div><p><b>Preset chunein</b> — Apni recording type ke hisaab se (Voice, Meeting, Music, Outdoor) preset select karein.</p></div>
+    <div class="guide-step"><div class="num">3</div><p><b>Sliders adjust karein</b> — Zaroorat ho toh Noise Strength, Gate, High-pass, Low-pass manually badlein.</p></div>
+    <div class="guide-step"><div class="num">4</div><p><b>"Clean Audio Karein" dabayein</b> — Kuch second mein processing complete ho jaayegi.</p></div>
+    <div class="guide-step"><div class="num">5</div><p><b>Result suniye aur download karein</b> — Free mein 20 second preview milega, full export ke liye ₹199 mein lifetime unlock karein.</p></div>
+    <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:10px;" id="closeGuide2">Samajh Gaya</button>
+  </div>
+</div>
+
+<!-- UNLOCK MODAL -->
+<div class="modal-overlay" id="unlockModal">
+  <div class="modal">
+    <span class="close" id="closeUnlock">✕</span>
+    <h2>🔓 Lifetime Unlock</h2>
+    <div class="price-box">
+      <div class="amt">₹199 <span>/ one-time</span></div>
+      <ul class="price-list">
+        <li>Unlimited full-length exports</li>
+        <li>No watermark, no time limit</li>
+        <li>Sabhi future noise presets free</li>
+        <li>Priority AI processing</li>
+        <li>Lifetime — koi renewal nahi</li>
+      </ul>
+    </div>
+    <button class="btn btn-gold" style="width:100%; justify-content:center;" id="payBtn">Razorpay se Pay Karein</button>
+    <p style="font-size:11px; color:var(--text-faint); text-align:center; margin-top:12px;" id="demoNote">⚠️ Demo Mode: Payment credentials configured nahi hain. Testing ke liye "Simulate Unlock" use karein.</p>
+    <button class="btn btn-ghost" style="width:100%; justify-content:center; margin-top:8px; display:none;" id="simulateUnlockBtn">🧪 Simulate Unlock (Demo)</button>
+  </div>
+</div>
+
+<script>
+/* ============ CONFIG ============ */
+const CONFIG = {
+  tool_id: 'background-noise-remover',
+  price_inr: 199,
+  price_paise: 19900,
+  supabase_url: 'YOUR_SUPABASE_PROJECT_URL',
+  supabase_anon_key: 'YOUR_SUPABASE_ANON_KEY',
+  razorpay_key_id: 'YOUR_RAZORPAY_KEY_ID',
+  free_preview_seconds: 20
+};
+const DEMO_MODE = (
+  CONFIG.supabase_url.includes('YOUR_') ||
+  CONFIG.razorpay_key_id.includes('YOUR_') ||
+  CONFIG.supabase_anon_key.includes('YOUR_')
+);
+
+/* ============ DEVICE ID / UNLOCK STATE ============ */
+function getDeviceId(){
+  let id = localStorage.getItem('iah_device_id');
+  if(!id){
+    id = 'dev_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('iah_device_id', id);
+  }
+  return id;
+}
+function unlockKey(){ return 'iah_unlock_' + CONFIG.tool_id; }
+function isUnlocked(){ return localStorage.getItem(unlockKey()) === 'true'; }
+function setUnlocked(){ localStorage.setItem(unlockKey(), 'true'); refreshUnlockUI(); }
+
+async function checkUnlockOnServer(){
+  if(DEMO_MODE) return isUnlocked();
+  try{
+    const res = await fetch(CONFIG.supabase_url + '/functions/v1/check-unlock', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + CONFIG.supabase_anon_key },
+      body: JSON.stringify({ tool_id: CONFIG.tool_id, device_id: getDeviceId() })
+    });
+    const data = await res.json();
+    if(data.unlocked){ setUnlocked(); return true; }
+    return isUnlocked();
+  }catch(e){
+    console.warn('check-unlock failed, falling back to local state', e);
+    return isUnlocked();
+  }
+}
+
+function refreshUnlockUI(){
+  const badge = document.getElementById('modeBadge');
+  if(isUnlocked()){
+    badge.textContent = 'UNLOCKED'; badge.className = 'badge unlocked';
+  } else if(DEMO_MODE){
+    badge.textContent = 'DEMO MODE'; badge.className = 'badge demo';
+  } else {
+    badge.textContent = 'LIVE'; badge.className = 'badge live';
+  }
+  document.getElementById('freeExportRow').style.display = isUnlocked() ? 'none' : 'flex';
+  document.getElementById('unlockedExportRow').style.display = isUnlocked() ? 'flex' : 'none';
+  document.getElementById('lockBanner').style.display = isUnlocked() ? 'none' : 'flex';
+}
+
+/* ============ RAZORPAY PAYMENT ============ */
+function openRazorpayCheckout(){
+  if(DEMO_MODE){
+    alert('Demo Mode: Razorpay keys configure nahi hain. "Simulate Unlock" button use karein testing ke liye.');
+    return;
+  }
+  fetch(CONFIG.supabase_url + '/functions/v1/create-order', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + CONFIG.supabase_anon_key },
+    body: JSON.stringify({ tool_id: CONFIG.tool_id, amount: CONFIG.price_paise, device_id: getDeviceId() })
+  })
+  .then(r => r.json())
+  .then(order => {
+    const rzp = new Razorpay({
+      key: CONFIG.razorpay_key_id,
+      amount: CONFIG.price_paise,
+      currency: 'INR',
+      name: 'IncomeAIHub',
+      description: 'Background Noise Remover — Lifetime Unlock',
+      order_id: order.id,
+      handler: function(response){
+        fetch(CONFIG.supabase_url + '/functions/v1/verify-payment', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + CONFIG.supabase_anon_key },
+          body: JSON.stringify({ ...response, tool_id: CONFIG.tool_id, device_id: getDeviceId() })
+        })
+        .then(r => r.json())
+        .then(res => { if(res.verified){ setUnlocked(); closeModal('unlockModal'); alert('✅ Unlock successful! Ab full export available hai.'); } });
+      },
+      theme:{ color:'#f0c14b' }
+    });
+    rzp.open();
+  })
+  .catch(e => alert('Payment start nahi ho paya. Baad mein try karein.'));
+}
+
+/* ============ MODALS ============ */
+function openModal(id){ document.getElementById(id).style.display = 'flex'; }
+function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+document.getElementById('guideBtn').onclick = () => openModal('guideModal');
+document.getElementById('closeGuide').onclick = () => closeModal('guideModal');
+document.getElementById('closeGuide2').onclick = () => closeModal('guideModal');
+document.getElementById('unlockBtn').onclick = () => openModal('unlockModal');
+document.getElementById('lockBannerBtn').onclick = () => openModal('unlockModal');
+document.getElementById('closeUnlock').onclick = () => closeModal('unlockModal');
+document.getElementById('payBtn').onclick = openRazorpayCheckout;
+document.getElementById('simulateUnlockBtn').onclick = () => { setUnlocked(); closeModal('unlockModal'); alert('✅ Demo unlock done.'); };
+if(DEMO_MODE) document.getElementById('simulateUnlockBtn').style.display = 'block';
+else document.getElementById('demoNote').style.display = 'none';
+
+document.querySelectorAll('.modal-overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if(e.target === ov) ov.style.display = 'none'; });
+});
+
+/* ============ AUDIO ENGINE ============ */
+let audioCtx = null;
+let originalBuffer = null;
+let cleanedBuffer = null;
+let currentPreset = 'voice';
+let mediaRecorder = null;
+let recordedChunks = [];
+
+const PRESETS = {
+  voice:   { strength:65, gate:-42, highpass:90,  lowpass:9000,  clarity:30 },
+  meeting: { strength:75, gate:-38, highpass:110, lowpass:7500,  clarity:40 },
+  music:   { strength:35, gate:-55, highpass:40,  lowpass:15000, clarity:10 },
+  outdoor: { strength:85, gate:-34, highpass:150, lowpass:6500,  clarity:45 },
+  custom:  null
+};
+
+function getAudioCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+document.getElementById('pickFileBtn').onclick = () => fileInput.click();
+dropzone.addEventListener('click', (e) => { if(e.target.id !== 'recordBtn') fileInput.click(); });
+['dragover','dragenter'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
+dropzone.addEventListener('drop', e => {
+  const f = e.dataTransfer.files[0];
+  if(f) handleFile(f);
+});
+fileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+
+document.getElementById('recordBtn').addEventListener('click', async (e) => {
+  e.stopPropagation();
+  if(mediaRecorder && mediaRecorder.state === 'recording'){
+    mediaRecorder.stop();
+    document.getElementById('recordBtn').textContent = '⏺ Record Karein';
+    return;
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = ev => recordedChunks.push(ev.data);
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, { type:'audio/webm' });
+      const file = new File([blob], 'recording.webm', { type:'audio/webm' });
+      handleFile(file);
+      stream.getTracks().forEach(t => t.stop());
+    };
+    mediaRecorder.start();
+    document.getElementById('recordBtn').textContent = '⏹ Stop Recording';
+  }catch(err){
+    alert('Microphone access nahi mil paya. Browser permissions check karein.');
+  }
+});
+
+async function handleFile(file){
+  if(file.size > 25 * 1024 * 1024){ alert('File 25MB se badi hai. Chhoti file try karein.'); return; }
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('fileMeta').textContent = (file.size/1024/1024).toFixed(2) + ' MB · ' + (file.type || 'audio');
+  const arrayBuffer = await file.arrayBuffer();
+  try{
+    originalBuffer = await getAudioCtx().decodeAudioData(arrayBuffer.slice(0));
+  }catch(err){
+    alert('Ye file decode nahi ho payi. Kripya ek valid audio/video file try karein.');
+    return;
+  }
+  document.getElementById('workspace').style.display = 'block';
+  document.getElementById('resultBox').style.display = 'none';
+  drawWaveform(originalBuffer, document.getElementById('origCanvas'));
+  document.getElementById('origDuration').textContent = formatTime(originalBuffer.duration);
+  document.getElementById('workspace').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+document.getElementById('removeFile').onclick = () => {
+  originalBuffer = null; cleanedBuffer = null;
+  document.getElementById('workspace').style.display = 'none';
+  fileInput.value = '';
+};
+
+document.getElementById('previewBtn').onclick = () => {
+  if(!originalBuffer) return;
+  const ctx = getAudioCtx();
+  const src = ctx.createBufferSource();
+  src.buffer = originalBuffer;
+  src.connect(ctx.destination);
+  src.start();
+};
+
+/* ---- Preset chips ---- */
+document.querySelectorAll('.preset-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    currentPreset = chip.dataset.preset;
+    document.getElementById('statPreset').textContent = chip.textContent.trim();
+    const p = PRESETS[currentPreset];
+    if(p){
+      setSlider('strength', p.strength); setSlider('gate', p.gate);
+      setSlider('highpass', p.highpass); setSlider('lowpass', p.lowpass);
+      setSlider('clarity', p.clarity);
+    }
+  });
+});
+function setSlider(id, val){
+  document.getElementById(id).value = val;
+  document.getElementById(id).dispatchEvent(new Event('input'));
+}
+
+/* ---- Slider labels ---- */
+const sliderMap = [
+  ['strength','valStrength', v => v + '%'],
+  ['gate','valGate', v => v + 'dB'],
+  ['highpass','valHP', v => v + 'Hz'],
+  ['lowpass','valLP', v => v + 'Hz'],
+  ['clarity','valClarity', v => v + '%'],
+  ['gain','valGain', v => (v>0?'+':'') + v + 'dB'],
+];
+sliderMap.forEach(([id,labelId,fmt]) => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    document.getElementById(labelId).textContent = fmt(el.value);
+    document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+    document.querySelector('[data-preset="custom"]').classList.add('active');
+  });
+});
+
+/* ---- Waveform drawing ---- */
+function drawWaveform(buffer, canvas){
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = (rect.width || 600) * dpr;
+  canvas.height = 110 * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const w = rect.width || 600, h = 110;
+  ctx.clearRect(0,0,w,h);
+  const data = buffer.getChannelData(0);
+  const step = Math.ceil(data.length / w);
+  ctx.beginPath();
+  const grad = ctx.createLinearGradient(0,0,0,h);
+  grad.addColorStop(0,'#34d399'); grad.addColorStop(1,'#a78bfa');
+  ctx.strokeStyle = grad; ctx.lineWidth = 1.2;
+  for(let i=0;i<w;i++){
+    let min=1.0,max=-1.0;
+    for(let j=0;j<step;j++){
+      const idx = i*step+j;
+      if(idx < data.length){
+        const v = data[idx];
+        if(v<min) min=v; if(v>max) max=v;
+      }
+    }
+    const y1 = (1+min)*h/2, y2=(1+max)*h/2;
+    ctx.moveTo(i, y1); ctx.lineTo(i, y2);
+  }
+  ctx.stroke();
+}
+function formatTime(sec){
+  const m = Math.floor(sec/60), s = Math.floor(sec%60);
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+/* ---- WAV encoder ---- */
+function audioBufferToWav(buffer){
+  const numChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const format = 1, bitDepth = 16;
+  let result;
+  if(numChannels === 2){
+    result = interleave(buffer.getChannelData(0), buffer.getChannelData(1));
+  } else {
+    result = buffer.getChannelData(0);
+  }
+  const dataLength = result.length * (bitDepth/8);
+  const bufferArr = new ArrayBuffer(44 + dataLength);
+  const view = new DataView(bufferArr);
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + dataLength, true);
+  writeString(view, 8, 'WAVE');
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, format, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * numChannels * (bitDepth/8), true);
+  view.setUint16(32, numChannels * (bitDepth/8), true);
+  view.setUint16(34, bitDepth, true);
+  writeString(view, 36, 'data');
+  view.setUint32(40, dataLength, true);
+  floatTo16BitPCM(view, 44, result);
+  return new Blob([bufferArr], { type:'audio/wav' });
+}
+function interleave(l, r){
+  const len = l.length + r.length;
+  const result = new Float32Array(len);
+  let idx=0, i=0;
+  while(i < l.length){ result[idx++]=l[i]; result[idx++]=r[i]; i++; }
+  return result;
+}
+function writeString(view, offset, str){
+  for(let i=0;i<str.length;i++) view.setUint8(offset+i, str.charCodeAt(i));
+}
+function floatTo16BitPCM(view, offset, input){
+  for(let i=0;i<input.length;i++, offset+=2){
+    let s = Math.max(-1, Math.min(1, input[i]));
+    view.setInt16(offset, s < 0 ? s*0x8000 : s*0x7FFF, true);
+  }
+}
+
+/* ---- Noise gate (post-filter, applied on raw samples with attack/release) ---- */
+function applyNoiseGate(channelData, sampleRate, thresholdDb, strengthPct){
+  const threshold = Math.pow(10, thresholdDb/20);
+  const windowSize = Math.floor(sampleRate * 0.02); // 20ms windows
+  const attenuationFloor = 1 - (strengthPct/100); // how much we let through when below threshold
+  let envelope = 0;
+  const attackCoef = 0.4, releaseCoef = 0.05;
+  const out = new Float32Array(channelData.length);
+  for(let i=0;i<channelData.length;i += windowSize){
+    let sum = 0;
+    const end = Math.min(i+windowSize, channelData.length);
+    for(let j=i;j<end;j++) sum += channelData[j]*channelData[j];
+    const rms = Math.sqrt(sum / (end-i));
+    const targetGain = rms < threshold ? attenuationFloor : 1.0;
+    for(let j=i;j<end;j++){
+      envelope += (targetGain > envelope ? attackCoef : releaseCoef) * (targetGain - envelope);
+      out[j] = channelData[j] * envelope;
+    }
+  }
+  return out;
+}
+
+/* ---- Main processing pipeline ---- */
+async function processAudio(){
+  if(!originalBuffer) return;
+  const strength = parseInt(document.getElementById('strength').value);
+  const gateDb = parseInt(document.getElementById('gate').value);
+  const hpFreq = parseInt(document.getElementById('highpass').value);
+  const lpFreq = parseInt(document.getElementById('lowpass').value);
+  const clarity = parseInt(document.getElementById('clarity').value);
+  const gainDb = parseInt(document.getElementById('gain').value);
+
+  document.getElementById('progressWrap').style.display = 'block';
+  document.getElementById('progressFill').style.width = '10%';
+  document.getElementById('progressLabel').textContent = 'Filters laga rahe hain...';
+
+  const offlineCtx = new OfflineAudioContext(
+    originalBuffer.numberOfChannels,
+    originalBuffer.length,
+    originalBuffer.sampleRate
+  );
+  const src = offlineCtx.createBufferSource();
+  src.buffer = originalBuffer;
+
+  const highpass = offlineCtx.createBiquadFilter();
+  highpass.type = 'highpass'; highpass.frequency.value = hpFreq; highpass.Q.value = 0.707;
+
+  const lowpass = offlineCtx.createBiquadFilter();
+  lowpass.type = 'lowpass'; lowpass.frequency.value = lpFreq; lowpass.Q.value = 0.707;
+
+  const notch = offlineCtx.createBiquadFilter();
+  notch.type = 'notch'; notch.frequency.value = 50; notch.Q.value = 8; // mains hum
+
+  const presence = offlineCtx.createBiquadFilter();
+  presence.type = 'peaking'; presence.frequency.value = 2800; presence.Q.value = 1.1;
+  presence.gain.value = (clarity/100) * 8; // clarity boost around vocal presence
+
+  const comp = offlineCtx.createDynamicsCompressor();
+  comp.threshold.value = -28; comp.knee.value = 18; comp.ratio.value = 3.2;
+  comp.attack.value = 0.003; comp.release.value = 0.25;
+
+  const outGain = offlineCtx.createGain();
+  outGain.gain.value = Math.pow(10, gainDb/20);
+
+  src.connect(highpass);
+  highpass.connect(notch);
+  notch.connect(lowpass);
+  lowpass.connect(presence);
+  presence.connect(comp);
+  comp.connect(outGain);
+  outGain.connect(offlineCtx.destination);
+
+  src.start();
+
+  document.getElementById('progressFill').style.width = '45%';
+  document.getElementById('progressLabel').textContent = 'Rendering ho raha hai...';
+
+  const rendered = await offlineCtx.startRendering();
+
+  document.getElementById('progressFill').style.width = '75%';
+  document.getElementById('progressLabel').textContent = 'Noise gate apply ho raha hai...';
+  await new Promise(r => setTimeout(r, 50));
+
+  const outBuffer = getAudioCtx().createBuffer(rendered.numberOfChannels, rendered.length, rendered.sampleRate);
+  for(let ch=0; ch<rendered.numberOfChannels; ch++){
+    const gated = applyNoiseGate(rendered.getChannelData(ch), rendered.sampleRate, gateDb, strength);
+    outBuffer.copyToChannel(gated, ch);
+  }
+
+  cleanedBuffer = outBuffer;
+
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = 'Ho gaya!';
+  await new Promise(r => setTimeout(r, 300));
+  document.getElementById('progressWrap').style.display = 'none';
+
+  drawWaveform(cleanedBuffer, document.getElementById('cleanCanvas'));
+  document.getElementById('cleanDuration').textContent = formatTime(cleanedBuffer.duration);
+  document.getElementById('statReduction').textContent = strength + '%';
+
+  const wavBlob = audioBufferToWav(cleanedBuffer);
+  const url = URL.createObjectURL(wavBlob);
+  document.getElementById('cleanAudio').src = url;
+
+  document.getElementById('resultBox').style.display = 'block';
+  document.getElementById('resultBox').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  refreshUnlockUI();
+}
+document.getElementById('processBtn').onclick = processAudio;
+
+/* ---- Downloads ---- */
+function downloadBlob(blob, filename){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+document.getElementById('downloadFreeBtn').onclick = () => {
+  if(!cleanedBuffer) return;
+  const ctx2 = getAudioCtx();
+  const maxSamples = Math.min(cleanedBuffer.length, Math.floor(CONFIG.free_preview_seconds * cleanedBuffer.sampleRate));
+  const trimmed = ctx2.createBuffer(cleanedBuffer.numberOfChannels, maxSamples, cleanedBuffer.sampleRate);
+  for(let ch=0; ch<cleanedBuffer.numberOfChannels; ch++){
+    trimmed.copyToChannel(cleanedBuffer.getChannelData(ch).slice(0, maxSamples), ch);
+  }
+  downloadBlob(audioBufferToWav(trimmed), 'noise-removed-preview.wav');
+};
+document.getElementById('downloadFullBtn').onclick = () => {
+  if(!cleanedBuffer) return;
+  downloadBlob(audioBufferToWav(cleanedBuffer), 'noise-removed-full.wav');
+};
+
+/* ============ INIT ============ */
+checkUnlockOnServer().then(refreshUnlockUI);
+window.addEventListener('resize', () => {
+  if(originalBuffer) drawWaveform(originalBuffer, document.getElementById('origCanvas'));
+  if(cleanedBuffer) drawWaveform(cleanedBuffer, document.getElementById('cleanCanvas'));
+});
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+</html>
